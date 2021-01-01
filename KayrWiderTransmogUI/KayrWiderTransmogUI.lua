@@ -26,7 +26,6 @@ KayrWiderTransmogUI.initDone = false
 -- Listen for Blizz Collections UI being loaded
 -- --------------------------------------------------------
 function KayrWiderTransmogUI:ADDON_LOADED(event, addon)
-    KLib:Con("KayrWiderTransmogUI.ADDON_LOADED", event, addon)
     if addon == "Blizzard_Collections" then
         KayrWiderTransmogUI:Init()
     end
@@ -42,13 +41,10 @@ function KayrWiderTransmogUI.Dump()
 
     KLib:Con("KayrWiderTransmogUI", "WardrobeFrame:GetWidth()", WardrobeFrame:GetWidth())
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame:GetWidth()", WardrobeTransmogFrame:GetWidth())
-
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame.Inset GetWidth()", WardrobeTransmogFrame.Inset:GetWidth())
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame.Inset.Bg GetWidth()", WardrobeTransmogFrame.Inset.Bg:GetWidth())
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame.Inset.BG GetWidth()", WardrobeTransmogFrame.Inset.BG:GetWidth())
-
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame.ModelScene GetWidth()", WardrobeTransmogFrame.ModelScene:GetWidth())
-
     KLib:Con("KayrWiderTransmogUI", "ModelScene SlotButtons: ----------------")
     for key, val in pairs(WardrobeTransmogFrame.ModelScene.SlotButtons) do
         KLib:Con("KayrWiderTransmogUI", "ModelScene SlotButtons", key, val, val.slotID, val.slot)
@@ -107,7 +103,6 @@ function KayrWiderTransmogUI.Adjust()
         WardrobeTransmogFrame.ModelScene.activeCamera.maxZoomDistance = 5
     end
     WardrobeTransmogFrame.ModelScene:SetScript("OnShow", function() C_Timer.After(0.25, ExtendZoomDistance) end)
-    -- WardrobeTransmogFrame.ModelScene.activeCamera.maxZoomDistance = 5
 end
 
 -- --------------------------------------------------------------------------------------------------------------------
