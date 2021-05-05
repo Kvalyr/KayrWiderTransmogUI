@@ -1,7 +1,7 @@
-## Interface: 90002
+## Interface: 90005
 ## Title: Wider Transmog Preview
 ## Author: Kvalyr
 ## Notes: Makes the transmog preview pane wider and allows zooming out further
-## Version: 0.1.0
+## Version: 0.1.1
 
 KayrWiderTransmogUI.lua
