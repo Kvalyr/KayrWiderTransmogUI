@@ -2,6 +2,7 @@
 -- =	KayrWiderTransmogUI
 -- =	Copyright (c) Kvalyr - 2020-2021 - All Rights Reserved
 -- ====================================================================================================================
+local hooksecurefunc = _G["hooksecurefunc"]
 local C_Timer = _G["C_Timer"]
 local CreateFrame = _G["CreateFrame"]
 
@@ -45,8 +46,17 @@ function KayrWiderTransmogUI.Dump()
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame.Inset.Bg GetWidth()", WardrobeTransmogFrame.Inset.Bg:GetWidth())
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame.Inset.BG GetWidth()", WardrobeTransmogFrame.Inset.BG:GetWidth())
     KLib:Con("KayrWiderTransmogUI", "WardrobeTransmogFrame.ModelScene GetWidth()", WardrobeTransmogFrame.ModelScene:GetWidth())
+
+    KLib.DebugFramePoints(WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox)
+
+    local slotButtons = WardrobeTransmogFrame.SlotButtons
+    if not slotButtons then
+        KLib:Con("KayrWiderTransmogUI", "ModelScene SlotButtons: NIL")
+        return
+    end
+
     KLib:Con("KayrWiderTransmogUI", "ModelScene SlotButtons: ----------------")
-    for key, val in pairs(WardrobeTransmogFrame.ModelScene.SlotButtons) do
+    for key, val in pairs(slotButtons) do
         KLib:Con("KayrWiderTransmogUI", "ModelScene SlotButtons", key, val, val.slotID, val.slot)
         KLib.DebugFramePoints(val)
     end
@@ -72,30 +82,22 @@ function KayrWiderTransmogUI.Adjust()
     WardrobeTransmogFrame.Inset.BG:SetWidth(WardrobeTransmogFrame.Inset.Bg:GetWidth() - insetWidth)
     WardrobeTransmogFrame.ModelScene:SetWidth(WardrobeTransmogFrame:GetWidth() - insetWidth)
 
-    -- 1 == HEADSLOT
-    -- 9 == HANDSSLOT
-    -- 13 == MAINHANDSLOT
-    -- 14 == SECONDARYHANDSLOT
-
     -- Move HEADSLOT -- Other slots in the left column are attached relative to it
-    WardrobeTransmogFrame.ModelScene.SlotButtons[1]:SetPoint("TOP", -235, -40)
+    WardrobeTransmogFrame.HeadButton:SetPoint("TOP", -235, -40)
 
     -- Move HANDSSLOT -- Other slots in the right column are attached relative to it
-    WardrobeTransmogFrame.ModelScene.SlotButtons[9]:SetPoint("TOP", 238, -118)
+    WardrobeTransmogFrame.HandsButton:SetPoint("TOP", 238, -118)
 
-    local weaponSlotOffset = 25
+    -- -- Move MAINHANDSLOT
+    WardrobeTransmogFrame.MainHandButton:SetPoint("BOTTOM", -26, 23)
+    WardrobeTransmogFrame.MainHandEnchantButton:SetPoint("CENTER", -26, -230)
 
-    -- Move MAINHANDSLOT
-    local mainHandPoint, _, _, mainHandXOffset, mainHandYOffset = WardrobeTransmogFrame.ModelScene.SlotButtons[13]:GetPoint("BOTTOM")
-    local mainHandEnchantPoint, _, _, mainHandEnchantXOffset, mainHandEnchantYOffset = WardrobeTransmogFrame.ModelScene.SlotButtons[15]:GetPoint()
-    WardrobeTransmogFrame.ModelScene.SlotButtons[13]:SetPoint(mainHandPoint, mainHandXOffset, mainHandYOffset - weaponSlotOffset)
-    WardrobeTransmogFrame.ModelScene.SlotButtons[15]:SetPoint(mainHandEnchantPoint, mainHandEnchantXOffset, mainHandEnchantYOffset - weaponSlotOffset)
+    -- -- Move SECONDARYHANDSLOT
+    WardrobeTransmogFrame.SecondaryHandButton:SetPoint("BOTTOM", 27, 23)
+    WardrobeTransmogFrame.SecondaryHandEnchantButton:SetPoint("CENTER", 27, -230)
 
-    -- Move SECONDARYHANDSLOT
-    local offHandPoint, _, _, offHandXOffset, offHandYOffset = WardrobeTransmogFrame.ModelScene.SlotButtons[14]:GetPoint("BOTTOM")
-    local offHandEnchantPoint, _, _, offHandEnchantXOffset, offHandEnchantYOffset = WardrobeTransmogFrame.ModelScene.SlotButtons[16]:GetPoint()
-    WardrobeTransmogFrame.ModelScene.SlotButtons[14]:SetPoint(offHandPoint, offHandXOffset, offHandYOffset - weaponSlotOffset)
-    WardrobeTransmogFrame.ModelScene.SlotButtons[16]:SetPoint(offHandEnchantPoint, offHandEnchantXOffset, offHandEnchantYOffset - weaponSlotOffset)
+    -- Move Separate Shoulder checkbox
+    WardrobeTransmogFrame.ToggleSecondaryAppearanceCheckbox:SetPoint("BOTTOMLEFT", WardrobeTransmogFrame, "BOTTOMLEFT", 580, 15)
 
     -- Ease constraints on zooming out
     -- Default probably varies by player race but who cares, just let the player zoom out
@@ -109,12 +111,9 @@ end
 -- Init
 -- --------------------------------------------------------
 function KayrWiderTransmogUI:Init()
-    -- KLib:Con("KayrWiderTransmogUI.Init")
-    -- KayrWiderTransmogUI.Dump()
-
-    KayrWiderTransmogUI.Adjust()
+    local WardrobeTransmogFrame = _G["WardrobeTransmogFrame"]
+    hooksecurefunc(WardrobeTransmogFrame, "Update", KayrWiderTransmogUI.Adjust)
     KayrWiderTransmogUI.initDone = true
-
 end
 
 KayrWiderTransmogUI:RegisterEvent("ADDON_LOADED")
